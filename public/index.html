@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <form>
+    <div class="username">
+      <label for="usrname">Username</label>
+      <input type="text" id="usrname" name="usrname" class="input-field" required>
+    </div>
+    <div class="password">
+      <label for="psw">Password</label>
+      <input type="password" class="input-field" id="psw" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+    </div>
+    <button id="submitForm" type="submit" value="Submit" class="submit-form" >Submit</button>
+  </form>
+</div>
+
+<div id="message" class="messages">
+  <h3>Password must contain the following:</h3>
+  <p id="lower" class="invalid">A <span class="bold">lowercase</span> letter</p>
+  <p id="capital" class="invalid">A <span class="bold">capital (uppercase)</span> letter</p>
+  <p id="number" class="invalid">A <span class="bold">number</span></p>
+  <p id="length" class="invalid">Minimum <span class="bold">8 characters</span></p>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
