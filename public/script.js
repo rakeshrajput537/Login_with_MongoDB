@@ -28,28 +28,28 @@
         el.addEventListener(event, callback);
       }
     }
+    function ajax(url, method, data) {
+      return new Promise(function(resolve, reject) {
+        var request = new XMLHttpRequest();
+        request.open(method, url, true);
+        request.responseType = 'text';
+        request.setRequestHeader("Content-Type", "application/json");
+        request.onreadystatechange = function() {
+          if (request.readyState === XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+              resolve(request.responseText);
+            } else {
+              reject(Error(request.statusText));
+            }
+          }
+    };
+        request.onerror = function() {
+          reject(Error("Network Error"));
+        };
+        request.send(data);
+      });
+    }
 
-    // function ajax(url, method, data) {
-    //   return new Promise(function(resolve, reject) {
-    //     var request = new XMLHttpRequest();
-    //     request.open(method, url, true);
-    //     request.responseType = 'text';
-    //     request.setRequestHeader("Content-Type", "application/json");
-    //     request.onreadystatechange = function() {
-    //       if (request.readyState === XMLHttpRequest.DONE) {
-    //         if (request.status === 200) {
-    //           resolve(request.responseText);
-    //         } else {
-    //           reject(Error(request.statusText));
-    //         }
-    //       }
-    //     };
-    //     request.onerror = function() {
-    //       reject(Error("Network Error"));
-    //     };
-    //     request.send(data);
-    //   });
-    // }
     var submitC = function(e) {
       e.preventDefault();
       var data = {
@@ -57,16 +57,15 @@
         'password': myInput.value
       };
 			var validate = new Validate();
-
-		// 	if (validate.check()) {
-		// 		ajax('http://localhost:5000/update', 'POST', JSON.stringify(data)).then(function(result) {
-		// 			console.log(result);
-		// 		}).catch(function() {
-		// 			console.log('failed');
-		// 		});
-		// 	} else {
-		// 		console.log('enter valid password');
-		// 	}
+			if (validate.check()) {
+				ajax('http://localhost:5000/update', 'POST', JSON.stringify(data)).then(function(result) {
+					console.log(result);
+				}).catch(function() {
+					console.log('failed');
+				});
+			} else {
+				console.log('enter valid password');
+			}
     }
     function eventListeners () {
       generic.addEvent(myInput, 'keyup', keyupC);

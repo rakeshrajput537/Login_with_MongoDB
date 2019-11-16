@@ -6,14 +6,14 @@
 </head>
 <body>
 <div class="container">
-  <form>
+  <form action="sign_up" method="POST">
     <div class="username">
       <label for="usrname">Username</label>
       <input type="text" id="usrname" name="usrname" class="input-field" required>
     </div>
     <div class="password">
       <label for="psw">Password</label>
-      <input type="password" class="input-field" id="psw" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+      <input type="password" class="input-field" id="psw" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
     </div>
     <button id="submitForm" type="submit" value="Submit" class="submit-form" >Submit</button>
   </form>
