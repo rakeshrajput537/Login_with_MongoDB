@@ -42,7 +42,7 @@
               reject(Error(request.statusText));
             }
           }
-    };
+        };
         request.onerror = function() {
           reject(Error("Network Error"));
         };
@@ -58,7 +58,7 @@
       };
 			var validate = new Validate();
 			if (validate.check()) {
-				ajax('http://localhost:5000/update', 'POST', JSON.stringify(data)).then(function(result) {
+				ajax('http://localhost:5001/addname', 'POST', JSON.stringify(data)).then(function(result) {
 					console.log(result);
 				}).catch(function() {
 					console.log('failed');
