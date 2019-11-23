@@ -8,7 +8,7 @@ var app = require('../app');
 var debug = require('debug')('login-validator:server');
 var http = require('http');
 module.exports = app;
-export default app
+export default app;
 /**
  * Get port from environment and store in Express.
  */
