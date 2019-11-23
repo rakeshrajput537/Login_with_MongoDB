@@ -63,28 +63,28 @@ app.post("/addname", (req, res) => {
 });
 
 
-app.post("/finduser", function(req, res) {
-		console.log(req);
+// app.post("/finduser", function(req, res) {
+// 		console.log(req);
 
-		User.find(req.body).exec().then(docs => {
-				console.log(docs);
-				if(docs.length > 0){
-					if((req.body.username === docs[0].username) && (req.body.password === docs[0].password)) {
-						res.status(200).json({status:true, value: "validated"});
-					} else {
-						res.status(200).json({status:false, value: "not validated"});
-					}
-				} else {
-					res.status(200).json({status:false, value: "not validated"});
-				}
-		})
-		.catch(err => {
-				console.log(err);
-				res.status(500).json({
-						status:false, value: "not validated"
-				});
-		});
-})
+// 		User.find(req.body).exec().then(docs => {
+// 				console.log(docs);
+// 				if(docs.length > 0){
+// 					if((req.body.username === docs[0].username) && (req.body.password === docs[0].password)) {
+// 						res.status(200).json({status:true, value: "validated"});
+// 					} else {
+// 						res.status(200).json({status:false, value: "not validated"});
+// 					}
+// 				} else {
+// 					res.status(200).json({status:false, value: "not validated"});
+// 				}
+// 		})
+// 		.catch(err => {
+// 				console.log(err);
+// 				res.status(500).json({
+// 						status:false, value: "not validated"
+// 				});
+// 		});
+// })
 
 
 app.get('/users', function(req, res) {
