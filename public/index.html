@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,5 +27,242 @@
   <p id="length" class="invalid">Minimum <span class="bold">8 characters</span></p>
 </div>
 <script src="script.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+.bold {
+  font-weight: bold;
+}
+
+/* Style all input fields */
+.container .input-field, .container .submit-form{
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+/* Style the submit button */
+.container .submit-form {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Style the container for inputs */
+.container {
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* The message box is shown when the user clicks on the password field */
+.messages {
+  display:none;
+  background: #f1f1f1;
+  color: #000;
+  position: relative;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.messages p {
+  padding: 10px 35px;
+  font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -35px;
+  content: "✔";
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -35px;
+  content: "✖";
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+  <form>
+    <div class="username">
+      <label for="usrname">Username</label>
+      <input type="text" id="usrname" name="usrname" class="input-field" required>
+    </div>
+    <div class="password">
+      <label for="psw">Password</label>
+      <input type="password" class="input-field" id="psw" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+    </div>
+    <button id="submitForm" type="submit" value="Submit" class="submit-form" >Submit</button>
+  </form>
+</div>
+
+<div id="message" class="messages">
+  <h3>Password must contain the following:</h3>
+  <p id="letter" class="invalid">A <span class="bold">lowercase</span> letter</p>
+  <p id="capital" class="invalid">A <span class="bold">capital (uppercase)</span> letter</p>
+  <p id="number" class="invalid">A <span class="bold">number</span></p>
+  <p id="length" class="invalid">Minimum <span class="bold">8 characters</span></p>
+</div>
+
+<script>
+  (function () {
+    var myInput = document.getElementById("psw");
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+    var message = document.getElementById("message");
+		var submit = document.getElementById("submitForm");
+		var username = document.getElementById("usrname");
+    var generic;
+
+    var validators = {
+      lowerCaseLetters: /[a-z]/g,
+      upperCaseLetters: /[A-Z]/g,
+      numbers:  /[0-9]/g,
+      length: 8
+    }
+
+    class Generic {
+      addClass(el, className) {
+        el.classList.add(className);
+      }
+      removeClass(el, className) {
+        el.classList.remove(className)
+      }
+      addEvent(el, event, callback) {
+        el.addEventListener(event, callback);
+      }
+    }
+
+    function ajax(url, method, data) {
+      return new Promise(function(resolve, reject) {
+        var request = new XMLHttpRequest();
+        request.open(method, url, true);
+        request.responseType = 'text';
+        request.setRequestHeader("Content-Type", "application/json");
+        request.onreadystatechange = function() {
+          if (request.readyState === XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+              resolve(request.responseText);
+            } else {
+              reject(Error(request.statusText));
+            }
+          }
+        };
+        request.onerror = function() {
+          reject(Error("Network Error"));
+        };
+        request.send(data);
+      });
+    }
+
+
+    var submitC = function(e) {
+      e.preventDefault();
+      var data = {
+        'username': username.value,
+        'password': myInput.value
+      };
+      ajax('http://localhost:4000/addname', 'POST', JSON.stringify(data)).then(function(result) {
+        console.log((result));
+      });
+
+    }
+
+    function eventListeners () {
+      generic.addEvent(myInput, 'keyup', keyupC);
+      generic.addEvent(myInput, 'focus', focusC);
+      generic.addEvent(myInput, 'blur', blurC);
+			generic.addEvent(submit, 'click', submitC);
+    }
+
+    // When the user clicks on the password field, show the message box
+    var focusC = function() {
+      message.style.display = "block";
+    }
+
+    // When the user clicks outside of the password field, hide the message box
+    var blurC = function() {
+      message.style.display = "none";
+    }
+
+    // When the user starts to type something inside the password field
+    var keyupC = function() {
+      var validate = new Validate();
+      validate.check();
+    }
+
+    class Validate {
+
+      check() {
+        if(myInput.value.match(validators.lowerCaseLetters)) {
+          generic.removeClass(letter, "invalid");
+          generic.addClass(letter, "valid");
+        } else {
+          generic.removeClass(letter, "valid");
+          generic.addClass(letter, "invalid");
+        }
+
+        // Validate capital letters
+        if(myInput.value.match(validators.upperCaseLetters)) {
+          generic.removeClass(capital, "invalid");
+          generic.addClass(capital, "valid");
+        } else {
+          generic.removeClass(capital, "valid");
+          generic.addClass(capital, "invalid");
+        }
+
+        // Validate numbers
+        if(myInput.value.match(validators.numbers)) {
+          generic.removeClass(number, "invalid");
+          generic.addClass(number, "valid");
+        } else {
+          generic.removeClass(number, "valid");
+          generic.addClass(number, "invalid");
+        }
+
+        // Validate length
+        if(myInput.value.length >= validators.length) {
+          generic.removeClass(length, "invalid");
+          generic.addClass(length, "valid");
+        } else {
+          generic.removeClass(length, "valid");
+          generic.addClass(length, "invalid");
+        }
+      }
+    }
+
+    function init() {
+      generic = new Generic();
+      eventListeners();
+    }
+
+    init();
+})();
+
+</script>
+
 </body>
 </html>
