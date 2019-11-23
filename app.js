@@ -4,7 +4,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var path = require('path');
-
+module.exports = app;
+ export default app;
 app.use(cookieParser());
 app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
